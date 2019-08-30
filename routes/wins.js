@@ -2,11 +2,6 @@ const router = require("express").Router()
 let Win = require("../models/win.model")
 require("dotenv").config()
 
-const accountSid = process.env.ACCOUNT_SID
-const authToken = process.env.AUTH_TOKEN
-const client = require("twilio")(accountSid, authToken)
-const MessagingResponse = require("twilio").twiml.MessagingResponse
-
 router.route("/").get((req, res) => {
   Win.find()
     .then(wins => res.json(wins))
