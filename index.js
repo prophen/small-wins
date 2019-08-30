@@ -21,10 +21,8 @@ connection.once("open", () => {
 })
 
 const winsRouter = require("./routes/wins")
-// const smsRouter = require("./routes/sms")
 
 app.use("/wins", winsRouter)
-// app.use("/sms", smsRouter)
 
 require("dotenv").config()
 
@@ -39,22 +37,17 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.post("/sms", (req, res) => {
   const twiml = new MessagingResponse()
   const message = twiml.message()
-  message.body(`Great job on this win: ${req.body.Body}! Here's a kitten`)
+  message.body(`Great job on this win: ${req.body.Body}
+  Here's a kitten`)
   message.media("https://placekitten.com/200")
 
   const description = req.body.Body
-  // const messageID
-  // const mediaUrl = req.body.mediaUrl
-  // const date = Date.parse(req.body.date)
 
   const newWin = new Win({
     description
   })
 
-  newWin
-    .save()
-    // .then(() => res.json("Win added!"))
-    .catch(err => res.status(400).json(`Error: ${err}`))
+  newWin.save().catch(err => res.status(400).json(`Error: ${err}`))
   res.writeHead(200, { "Content-Type": "text/xml" })
   res.end(twiml.toString())
 })
