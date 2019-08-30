@@ -32,6 +32,7 @@ let Win = require("./models/win.model")
 
 app.use(bodyParser.urlencoded({ extended: false }))
 const gifs = require("./gifs")
+
 app.post("/sms", (req, res) => {
   const twiml = new MessagingResponse()
   const message = twiml.message()
