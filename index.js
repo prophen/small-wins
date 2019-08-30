@@ -33,16 +33,24 @@ let Win = require("./models/win.model")
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.post("/sms", (req, res) => {
-  // axios.get(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=celebrate&rating=G`)
-  //   .then(response => {
-  //     console.log()
-  //   })
+  let gif_url =
+    "https://media3.giphy.com/media/17pNCufIeSb7c0kqfa/giphy.gif?cid=70a630c4526ddfb43579e809754629ffb9c8f1cfdd5dd4f2&rid=giphy.gif"
+  axios
+    .get(
+      `https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=celebrate&rating=G`
+    )
+    .then(response => {
+      gif_url = response.data.data.images.original.url
+    })
+    .catch(error => {
+      console.log(error)
+    })
   const twiml = new MessagingResponse()
   const message = twiml.message()
   message.body(`Great job on this win: ${req.body.Body}
   Here's a kitten`)
   message.media(
-    "https://media3.giphy.com/media/17pNCufIeSb7c0kqfa/200w.gif?cid=70a630c4526ddfb43579e809754629ffb9c8f1cfdd5dd4f2&rid=200w.gif"
+    "https://media3.giphy.com/media/17pNCufIeSb7c0kqfa/giphy.gif?cid=70a630c4526ddfb43579e809754629ffb9c8f1cfdd5dd4f2&rid=giphy.gif"
   )
 
   const description = req.body.Body
