@@ -2,7 +2,7 @@ const router = require("express").Router()
 let Win = require("../models/win.model")
 
 router.route("/").get((req, res) => {
-  Wins.find()
+  Win.find()
     .then(wins => res.json(wins))
     .catch(err => res.status(400).json(`Error: ${err}`))
 })
