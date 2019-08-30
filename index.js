@@ -20,7 +20,9 @@ connection.once("open", () => {
 })
 
 const winsRouter = require("./routes/wins")
+const smsRouter = require("./routes/sms")
 
 app.use("/wins", winsRouter)
+app.use("/sms", smsRouter)
 
 app.listen(port, () => console.log("app listening on port " + port))
