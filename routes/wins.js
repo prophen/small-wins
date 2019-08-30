@@ -27,15 +27,13 @@ router.route("/add").post((req, res) => {
 })
 router.route("/:id").delete((req, res) => {
   Win.findByIdAndDelete(req.params.id)
-    .then(win => res.json(exercise))
+    .then(win => res.json("Win deleted ☹"))
     .catch(err => res.status(400).json("Error: " + err))
 })
 router.route("/update/:id").post((req, res) => {
   Win.findById(req.params.id)
     .then(win => {
       win.description = req.body.description
-      win.mediaUrl = req.body.mediaUrl
-      win.date = Date.parse(req.body.date)
 
       win
         .save()
