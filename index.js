@@ -19,8 +19,6 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully")
 })
 
-app.get("/", (req, res) => res.send("Hello World!"))
-
 const winsRouter = require("./routes/wins")
 
 app.use("/wins", winsRouter)
