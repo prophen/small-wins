@@ -7,9 +7,7 @@ const winSchema = new Schema(
       required: true,
       trim: true,
       minlength: 3
-    },
-    mediaUrl: { type: String, required: false },
-    date: { type: Date, required: true }
+    }
   },
   {
     timestamps: true

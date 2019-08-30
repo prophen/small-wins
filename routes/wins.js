@@ -1,5 +1,11 @@
 const router = require("express").Router()
 let Win = require("../models/win.model")
+require("dotenv").config()
+
+const accountSid = process.env.ACCOUNT_SID
+const authToken = process.env.AUTH_TOKEN
+const client = require("twilio")(accountSid, authToken)
+const MessagingResponse = require("twilio").twiml.MessagingResponse
 
 router.route("/").get((req, res) => {
   Win.find()
@@ -9,13 +15,9 @@ router.route("/").get((req, res) => {
 
 router.route("/add").post((req, res) => {
   const description = req.body.description
-  const mediaUrl = req.body.mediaUrl
-  const date = Date.parse(req.body.date)
 
   const newWin = new Win({
-    description,
-    mediaUrl,
-    date
+    description
   })
 
   newWin

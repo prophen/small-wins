@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
+const bodyParser = require("body-parser")
 
 require("dotenv").config()
 
@@ -31,11 +32,31 @@ const accountSid = process.env.ACCOUNT_SID
 const authToken = process.env.AUTH_TOKEN
 const client = require("twilio")(accountSid, authToken)
 const MessagingResponse = require("twilio").twiml.MessagingResponse
+let Win = require("./models/win.model")
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.post("/sms", (req, res) => {
   const twiml = new MessagingResponse()
-  twiml.message(`Good job. This is what you sent: ${req.body.body}`)
+  const message = twiml.message()
+  message.body(`Great job on this win: ${req.body.Body}! Here's a kitten`)
+  message.media("https://placekitten.com/200")
+
+  const description = req.body.Body
+  // const messageID
+  // const mediaUrl = req.body.mediaUrl
+  // const date = Date.parse(req.body.date)
+
+  const newWin = new Win({
+    description
+  })
+
+  newWin
+    .save()
+    // .then(() => res.json("Win added!"))
+    .catch(err => res.status(400).json(`Error: ${err}`))
   res.writeHead(200, { "Content-Type": "text/xml" })
   res.end(twiml.toString())
 })
+
 app.listen(port, () => console.log("app listening on port " + port))
