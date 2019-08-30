@@ -4,11 +4,13 @@ const accountSid = process.env.ACCOUNT_SID
 const authToken = process.env.AUTH_TOKEN
 const client = require('twilio')(accountSid, authToken)
 
-client.messages
-  .create({
-    body: 'Hello World',
-    from: process.env.TWILIO_PHONE_NUMBER,
-    to: process.env.RECEIVING_PHONE_NUMBER
+client.messages('MMf6d1901dabf14a1fb1d9b2a100738b15')
+  // .create({
+  //   body: 'Hello World',
+  //   mediaUrl: 'https://placekitten.com/200',
+  //   from: process.env.TWILIO_PHONE_NUMBER,
+  //   to: process.env.RECEIVING_PHONE_NUMBER
 
-  })
-  .then(message => console.log(message.sid))
+  // })
+  .fetch()
+  .then(message => console.log(message.body))
