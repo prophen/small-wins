@@ -1,6 +1,5 @@
 const express = require("express")
 const cors = require("cors")
-const axios = require("axios")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 
@@ -23,15 +22,14 @@ connection.once("open", () => {
 
 const winsRouter = require("./routes/wins")
 app.use("/wins", winsRouter)
-
-// const accountSid = process.env.ACCOUNT_SID
-// const authToken = process.env.AUTH_TOKEN
-// const client = require("twilio")(accountSid, authToken)
-const MessagingResponse = require("twilio").twiml.MessagingResponse
 let Win = require("./models/win.model")
+
+const MessagingResponse = require("twilio").twiml.MessagingResponse
 
 app.use(bodyParser.urlencoded({ extended: false }))
 const gifs = require("./gifs")
+
+// TODO: make a new route for whatsapp so that GIFs don't break it
 
 app.post("/sms", (req, res) => {
   const twiml = new MessagingResponse()
@@ -48,6 +46,29 @@ app.post("/sms", (req, res) => {
   })
 
   newWin.save().catch(err => res.status(400).json(`Error: ${err}`))
+
+  res.writeHead(200, { "Content-Type": "text/xml" })
+  res.end(twiml.toString())
+})
+
+app.post("/whatsapp", (req, res) => {
+  const twiml = new MessagingResponse()
+  const message = twiml.message()
+
+  message.body(`Great job on this win: ${req.body.Body}`)
+
+  message.media(
+    "https://cataas.com/cat/says/Cat%20Says,%20Good%20job%20Nikema?filter=sepia"
+  )
+
+  const description = req.body.Body
+
+  const newWin = new Win({
+    description
+  })
+
+  newWin.save().catch(err => res.status(400).json(`Error: ${err}`))
+
   res.writeHead(200, { "Content-Type": "text/xml" })
   res.end(twiml.toString())
 })
